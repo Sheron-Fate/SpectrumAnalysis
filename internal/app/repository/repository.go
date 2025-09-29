@@ -9,7 +9,7 @@ import (
 )
 
 // Services slice (коллекция услуг)
-var services = []app.Service{
+var pigments = []app.Pigment{
 	{
 		ID:          "s1",
 		Name:        "Ультрамарин",
@@ -93,22 +93,29 @@ var services = []app.Service{
 	},
 }
 
-var applications = map[string]app.Application{
+var requests = map[string]app.AnalysisRequest{
 	"app1": {
 		ID:         "app1",
 		Owner:      "Егор Уфимцев",
 		Created:    time.Now(),
-		ServiceIDs: []string{"s1", "s2", "s8"},
+		PigmentIDs: []string{"s1", "s2", "s8"},
 		Notes:      "Анализ выцветшей фрагментации на стене…",
+		Comments: map[string]string{
+			"s1": "Подходит!",
+		},
+		Percent: map[string]int{
+			"s1": 75,
+		},
+		Spectrum: "255, 89; 250, 81; 221, 56",
 	},
 }
 
-func FilterServices(q string) []app.Service {
+func FilterPigments(q string) []app.Pigment {
 	if q == "" {
-		return services
+		return pigments
 	}
-	var out []app.Service
-	for _, s := range services {
+	var out []app.Pigment
+	for _, s := range pigments {
 		match := false
 		if strings.Contains(strings.ToLower(s.Name), strings.ToLower(q)) {
 			match = true
@@ -131,8 +138,8 @@ func FilterServices(q string) []app.Service {
 	return out
 }
 
-func GetService(id string) *app.Service {
-	for _, s := range services {
+func GetPigment(id string) *app.Pigment {
+	for _, s := range pigments {
 		if s.ID == id {
 			return &s
 		}
@@ -140,24 +147,24 @@ func GetService(id string) *app.Service {
 	return nil
 }
 
-func GetApplication(id string) *app.Application {
-	if a, ok := applications[id]; ok {
+func GetRequest(id string) *app.AnalysisRequest {
+	if a, ok := requests[id]; ok {
 		return &a
 	}
 	return nil
 }
 
-func ApplicationServiceCount(id string) int {
-	if a, ok := applications[id]; ok {
-		return len(a.ServiceIDs)
+func RequestPigmentCount(id string) int {
+	if a, ok := requests[id]; ok {
+		return len(a.PigmentIDs)
 	}
 	return 0
 }
 
-func GetServicesByIDs(ids []string) []app.Service {
-	var result []app.Service
+func GetPigmentsByIDs(ids []string) []app.Pigment {
+	var result []app.Pigment
 	for _, id := range ids {
-		for _, s := range services {
+		for _, s := range pigments {
 			if s.ID == id {
 				result = append(result, s)
 				break

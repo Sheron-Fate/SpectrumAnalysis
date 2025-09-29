@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"colorLex/internal/app/handler"
+
+	"github.com/gorilla/mux"
 )
 
 type Server struct{}
@@ -11,14 +13,18 @@ type Server struct{}
 func NewServer() *Server { return &Server{} }
 
 func (s *Server) Routes() {
-	// статика
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	r := mux.NewRouter()
 
-	// роуты
-	http.HandleFunc("/services", handler.ListServices)
-	http.HandleFunc("/service", handler.ShowService)
-	http.HandleFunc("/application", handler.ShowApplication)
+	// статика
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
+	// маршруты
+	r.HandleFunc("/pigments", handler.ListPigments).Methods("GET")
+	r.HandleFunc("/pigment", handler.ShowPigment).Methods("GET")
+	r.HandleFunc("/request/{id}", handler.ShowRequest).Methods("GET")
 
 	// alias для главной
-	http.HandleFunc("/", handler.ListServices)
+	r.HandleFunc("/", handler.ListPigments).Methods("GET")
+
+	http.Handle("/", r)
 }
