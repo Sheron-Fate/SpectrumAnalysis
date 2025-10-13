@@ -5,7 +5,7 @@ import (
     "github.com/google/uuid"
 )
 
-type AnalysisRequest struct {
+type SpectrumAnalysis struct {  // БЫЛО: AnalysisRequest
     ID          uuid.UUID `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
     Name        string
     Status      string
@@ -15,4 +15,9 @@ type AnalysisRequest struct {
     CompletedAt *time.Time
     ModeratorID *uint
     Spectrum    string
+}
+
+// Явно указываем имя таблицы
+func (SpectrumAnalysis) TableName() string {
+    return "spectrum_analysis"  // БЫЛО: "analysis_requests"
 }

@@ -16,10 +16,10 @@ func NewHandler(r *repository.Repository) *Handler {
 
 func (h *Handler) RegisterHandler(router *gin.Engine) {
 	router.GET("/pigments", h.GetPigments)
-	router.GET("/pigment", h.GetPigment)
-	router.GET("/request/:id", h.GetRequest)
-	router.POST("/request/add-pigment", h.AddPigmentToRequest)
-	router.POST("/request/delete", h.DeleteRequest)
+	router.GET("/pigment/:id", h.GetPigment)
+	router.GET("/spectrumAnalysis/:id", h.GetAnalysisRequest)
+	router.POST("/spectrumAnalysis/add-pigment", h.AddPigmentToAnalysisRequest)
+	router.POST("/spectrumAnalysis/delete", h.DeleteAnalysisRequest)
 }
 
 func (h *Handler) RegisterStatic(router *gin.Engine) {

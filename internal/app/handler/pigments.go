@@ -10,7 +10,7 @@ import (
 
 func (h *Handler) GetPigments(ctx *gin.Context) {
 	minioBase := getMinioBase()
-	q := ctx.Query("q")
+	q := ctx.Query("search")
 
 	var pigments []ds.Pigment
 	if q == "" {
@@ -19,7 +19,7 @@ func (h *Handler) GetPigments(ctx *gin.Context) {
 		h.Repository.GetDB().Where("name ILIKE ?", "%"+q+"%").Find(&pigments)
 	}
 
-	var request ds.AnalysisRequest
+	var request ds.SpectrumAnalysis
 	h.Repository.GetDB().Where("status = ?", "draft").First(&request)
 
 	var count int64
@@ -36,7 +36,7 @@ func (h *Handler) GetPigments(ctx *gin.Context) {
 
 func (h *Handler) GetPigment(ctx *gin.Context) {
 	minioBase := getMinioBase()
-	id := ctx.Query("id")
+	id := ctx.Param("id")
 
 	var pigment ds.Pigment
 	h.Repository.GetDB().First(&pigment, id)
